@@ -13,6 +13,9 @@ public class InputHandlers {
         restTemplate = new RestTemplate();
         scanner = new Scanner(System.in);
     }
+    public static Scanner getScanner() {
+        return InputHandlers.scanner;
+    }
     public static RestTemplate getRestTemplate() {
 //        get the rest template object
         return restTemplate;
@@ -48,6 +51,10 @@ public class InputHandlers {
                 break;
             case 3:
 //                create a new post
+                Post createdPost = PostHandlers.createPost();
+                if(createdPost != null) {
+                    DisplayHandlers.displayPost(createdPost);
+                }
                 break;
             case 4:
 //                delete a post

@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class PostHandlers {
     public static String url = null;
@@ -52,6 +53,28 @@ public class PostHandlers {
                 System.out.println("Fetching Failed");
                 System.out.println("--------------------------------------");
             }
+            return null;
+        }
+    }
+    public static Post createPost() {
+        RestTemplate restTemplate = InputHandlers.getRestTemplate();
+        Post post = new Post();
+        Scanner scanner = InputHandlers.scanner;
+        System.out.print("Enter the userId - ");
+        post.setUserId(scanner.nextInt());
+        scanner.nextLine();
+        System.out.print("Enter the post title - ");
+        post.setTitle(scanner.nextLine());
+        System.out.print("Enter the post body - ");
+        post.setBody(scanner.nextLine());
+        try {
+            ResponseEntity<Post> createdPost = restTemplate.postForEntity(PostHandlers.url, post, Post.class);
+            return createdPost.getBody();
+        }
+        catch (HttpClientErrorException e) {
+            System.out.println("==============================================");
+            System.out.println("Exception occurred while creating a post");
+            System.out.println("==============================================");
             return null;
         }
     }
