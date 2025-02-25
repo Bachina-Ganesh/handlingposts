@@ -58,9 +58,21 @@ public class InputHandlers {
                 break;
             case 4:
 //                delete a post
+                System.out.print("Enter the postId - ");
+                postId = scanner.nextInt();
+                PostHandlers.deletePost(postId);
                 break;
             case 5:
 //                update a post
+                post = PostHandlers.updatePost();
+                if(post != null) {
+                    DisplayHandlers.displayPost(post);
+                }
+                else {
+                    System.out.println("=============================");
+                    System.out.println("Post is not updated");
+                    System.out.println("=============================");
+                }
                 break;
             default:
 //                exit

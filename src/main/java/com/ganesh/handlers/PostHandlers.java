@@ -1,6 +1,9 @@
 package com.ganesh.handlers;
 
 import com.ganesh.pojo.Post;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -75,6 +78,49 @@ public class PostHandlers {
             System.out.println("==============================================");
             System.out.println("Exception occurred while creating a post");
             System.out.println("==============================================");
+            return null;
+        }
+    }
+    public static void deletePost(int postId) {
+        RestTemplate restTemplate = InputHandlers.getRestTemplate();
+        String url = PostHandlers.url+"/{id}";
+        ResponseEntity<Post> deletedPost = restTemplate.exchange(
+                url, HttpMethod.DELETE, null, Post.class, postId
+        );
+        if(deletedPost.getStatusCode() == HttpStatus.OK) {
+            System.out.println("-------------------------------");
+            System.out.println("Deleted post of id "+postId);
+            System.out.println("-------------------------------");
+        }
+        else {
+            System.out.println("----------------------------------");
+            System.out.println("Post is not deleted");
+            System.out.println("----------------------------------");
+        }
+    }
+    public static Post updatePost() {
+        Scanner scanner = InputHandlers.getScanner();
+        System.out.print("Enter the post id - ");
+        int postId = scanner.nextInt();
+        Post post = new Post();
+        System.out.print("Enter the user Id - ");
+        post.setUserId(scanner.nextInt());
+        scanner.nextLine();
+        System.out.print("Enter the title - ");
+        post.setTitle(scanner.nextLine());
+        System.out.print("Enter the body - ");
+        post.setBody(scanner.nextLine());
+
+        RestTemplate restTemplate = InputHandlers.getRestTemplate();
+        String url = PostHandlers.url+"/{id}";
+        HttpEntity<Post> requestEntity = new HttpEntity<>(post);
+        ResponseEntity<Post> updatedPost = restTemplate.exchange(
+                url, HttpMethod.PUT, requestEntity, Post.class, postId
+        );
+        if(updatedPost.getStatusCode() == HttpStatus.OK) {
+            return updatedPost.getBody();
+        }
+        else {
             return null;
         }
     }
